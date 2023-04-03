@@ -1,8 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model Quiz
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+	<span>@Model.Title</span><br />
+	<form>
+		<span><input type="radio" name="choices" value="@Model.Answer" />&nbsp;@Model.Answer</span><br />
+		@{
+			for (var i = 0; i < Model.Options.Count; i++)
+			{
+				<span>
+					<input type="radio" name="choices" value="@Model.Options[i]" />&nbsp;@Model.Options[i]<br />
+				</span>
+			}
+		}
+		<p id="log"></p>
+	</form>
 </div>
+
+<script>
+	const form = document.querySelector("form");
+	form.addEventListener(
+		"change",
+		(event) => {
+			const data = new FormData(form);
+			let output = "";
+			for (const entry of data) {
+				output = `${entry[0]}&nbsp=&nbsp${entry[1]}\r`;
+			}
+			log.innerHTML = output;
+			event.preventDefault();
+		},
+		false
+	);
+</script>
