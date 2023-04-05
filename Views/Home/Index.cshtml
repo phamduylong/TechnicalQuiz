@@ -8,29 +8,36 @@
 	}
 }
 
-<div>
-	<form>
-		<h5>@Model.Title</h5><br />
+<div class="card">
+	<div class="card-body">
+		<div>
+			<form>
+				<h5>@Model.Title</h5><br />
 
-		@{
-			for (var i = 0; i < Model.Options.Count; i++)
-			{
+				@{
+					for (var i = 0; i < Model.Options.Count; i++)
+					{
+						<div class="form-check">
+							<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Options[i]">
+							<label class="form-check-label">
+								@Model.Options[i]
+							</label>
+						</div>
+					}
+				}
 				<div class="form-check">
-					<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Options[i]">
+					<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Answer">
 					<label class="form-check-label">
-						@Model.Options[i]
+						@Model.Answer
 					</label>
 				</div>
-			}
-		}
-		<div class="form-check">
-			<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Answer">
-			<label class="form-check-label">
-				@Model.Answer
-			</label>
+				<div class="form-check text-center">
+					<input type="submit" class="btn btn-primary" />
+				</div>
+				
+			</form>
 		</div>
-		<input type="submit" class="btn btn-primary" />
-	</form>
+	</div>
 </div>
 
 <!-- Modal -->
@@ -72,11 +79,11 @@
 	document.querySelectorAll(".modalCloseBtn").
 		forEach(btn => {
 			btn.addEventListener(
-			"click",
-			async (e) => {
-				$('#modal').modal('hide');
-				form.reset();
-			});
+				"click",
+				async (e) => {
+					$('#modal').modal('hide');
+					form.reset();
+				});
 		});
-		
+
 </script>
