@@ -11,12 +11,7 @@
 <div>
 	<form>
 		<h5>@Model.Title</h5><br />
-		<div class="form-check">
-			<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Answer">
-			<label class="form-check-label">
-				@Model.Answer
-			</label>
-		</div>
+
 		@{
 			for (var i = 0; i < Model.Options.Count; i++)
 			{
@@ -28,24 +23,60 @@
 				</div>
 			}
 		}
-		<input type="submit" />
+		<div class="form-check">
+			<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Answer">
+			<label class="form-check-label">
+				@Model.Answer
+			</label>
+		</div>
+		<input type="submit" class="btn btn-primary" />
 	</form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Result 💫</h5>
+				<button type="button" class="close modalCloseBtn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="result-modal-body">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary modalCloseBtn">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
 	const form = document.querySelector("form");
-	// fix this event listener, only works for radio group
+	const modalBody = document.getElementById("result-modal-body");
+	// fix this event listener, only works for radio group for now
 	form.addEventListener(
 		"submit",
 		async (event) => {
+			event.preventDefault();
 			const data = await new FormData(form);
 			for (const entry of data) {
-				if (entry[1] === "@(Model.Answer)") {
-					// modal here
-				}
+				(entry[1] === "@(Model.Answer)") ? modalBody.innerText = "Your answer is correct ✅" : modalBody.innerText = "Your answer is wrong ❌";
 			}
-			event.preventDefault();
+			$('#modal').modal('show');
 		},
 		false
 	);
+
+	document.querySelectorAll(".modalCloseBtn").
+		forEach(btn => {
+			btn.addEventListener(
+			"click",
+			async (e) => {
+				$('#modal').modal('hide');
+				form.reset();
+			});
+		});
+		
 </script>
