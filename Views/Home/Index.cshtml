@@ -1,42 +1,50 @@
-﻿@model Quiz
+﻿@model List<Quiz>
 @{
 	ViewData["Title"] = "Home Page";
 	var inputType = "radio";
-	if (Model.AllowMultipleChoices)
-	{
-		inputType = "checkbox";
-	}
+	var answerTruthTable = new List<bool>(Model.Count);
 }
 
+<!-- Main card container -->
 <div class="card">
 	<div class="card-body">
-		<div>
-			<form>
-				<h5>@Model.Title</h5><br />
+		@{
+			for (var i = 0; i < Model.Count; ++i)
+			{
+				<div class="card m-2">
+					<div class="card-body">
+						<div>
+							<form>
+								<h5>@Model[i].Title</h5><br />
 
-				@{
-					for (var i = 0; i < Model.Options.Count; i++)
-					{
-						<div class="form-check">
-							<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Options[i]">
-							<label class="form-check-label">
-								@Model.Options[i]
-							</label>
+								@{
+									for (var j = 0; j < Model[i].Options.Count; j++)
+									{
+										<div class="form-check">
+											<input class="form-check-input" type="@(inputType)" name="choices" value="@Model[i].Options[j]">
+											<label class="form-check-label">
+												@Model[i].Options[j]
+											</label>
+										</div>
+									}
+								}
+								<div class="form-check">
+									<input class="form-check-input" type="@(inputType)" name="choices" value="@Model[i].Answer">
+									<label class="form-check-label">
+										@Model[i].Answer
+									</label>
+								</div>
+							</form>
 						</div>
-					}
-				}
-				<div class="form-check">
-					<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Answer">
-					<label class="form-check-label">
-						@Model.Answer
-					</label>
+					</div>
 				</div>
-				<div class="form-check text-center">
-					<input type="submit" class="btn btn-primary" />
-				</div>
-				
-			</form>
+			}
+		}
+
+		<div class="text-center">
+			<button class="btn btn-outline-primary m-4" id="submitBtn">Submit Answers</button>
 		</div>
+
 	</div>
 </div>
 
@@ -60,18 +68,19 @@
 </div>
 
 <script>
-	const form = document.querySelector("form");
+	const quiz_forms = document.querySelectorAll("form");
 	const modalBody = document.getElementById("result-modal-body");
+	const submitBtn = document.getElementById("submitBtn");
 	// fix this event listener, only works for radio group for now
-	form.addEventListener(
-		"submit",
+	submitBtn.addEventListener(
+		"click",
 		async (event) => {
-			event.preventDefault();
-			const data = await new FormData(form);
-			for (const entry of data) {
-				(entry[1] === "@(Model.Answer)") ? modalBody.innerText = "Your answer is correct ✅" : modalBody.innerText = "Your answer is wrong ❌";
+			for (let i = 0; i < quiz_forms.length; ++i) {
+				const data = await new FormData(quiz_forms[i]);
+				for (const entry of data) {
+					// figure out a way to compare model answer and form data?
+				}
 			}
-			$('#modal').modal('show');
 		},
 		false
 	);
