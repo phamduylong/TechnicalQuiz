@@ -15,7 +15,10 @@ namespace TechnicalQuiz.Controllers
 
 		public IActionResult Index()
 		{
-			return View(model:new Quiz("Who created the SvelteKit framework/compiler?", "Rich Harris", new List<string>() { "Bill Gates", "Linus Torsvald", "Ada Lovelace" }, false));
+			var quizzes = new List<Quiz>();
+			quizzes.Add(new Quiz("Who created the SvelteKit framework/compiler?", "Rich Harris", new List<string>() { "Bill Gates", "Linus Torsvald", "Ada Lovelace" }, false));
+			quizzes.Add(new Quiz("In what year was Svelte first released", "2016", new List<string>() { "2013", "2018", "2021" }, false));
+			return View(model: quizzes);
 		}
 
 		public IActionResult Privacy()
