@@ -79,9 +79,9 @@
 			modalBody.innerHTML = "";
 			quiz_forms.forEach(async (form, i) => {
 				const data = await new FormData(quiz_forms[i]);
-				for (const entry of data) {
+				for (const entry of data.values()) {
 
-					if (entry[1] === correctAnswers[i].answer) {
+					if (entry === correctAnswers[i].answer) {
 						modalBody.innerHTML += 
 						`<div class="card m-2 bg-success text-white">
 							<div class="card-body">
