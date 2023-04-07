@@ -2,7 +2,6 @@
 @{
 	ViewData["Title"] = "Home Page";
 	var inputType = "radio";
-	var answerTruthTable = new List<bool>(Model.Count);
 }
 
 <!-- Main card container -->
@@ -68,6 +67,7 @@
 </div>
 
 <script>
+	const correctAnswers = @Html.Raw(Json.Serialize(Model));
 	const quiz_forms = document.querySelectorAll("form");
 	const modalBody = document.getElementById("result-modal-body");
 	const submitBtn = document.getElementById("submitBtn");
@@ -75,15 +75,32 @@
 	submitBtn.addEventListener(
 		"click",
 		async (event) => {
-			for (let i = 0; i < quiz_forms.length; ++i) {
+			// reset modal in case of resubmitted answers
+			modalBody.innerHTML = "";
+			quiz_forms.forEach(async (form, i) => {
 				const data = await new FormData(quiz_forms[i]);
 				for (const entry of data) {
-					// figure out a way to compare model answer and form data?
+
+					if (entry[1] === correctAnswers[i].answer) {
+						modalBody.innerHTML += 
+						`<div class="card m-2 bg-success text-white">
+							<div class="card-body">
+								${i + 1}. Correct
+							</div>
+						</div>`;
+					} else {
+						modalBody.innerHTML += 
+						`<div class="card m-2 bg-danger text-white">
+							<div class="card-body">
+								${i + 1}. Incorrect
+							</div>
+						</div>`;
+					}
+
 				}
-			}
-		},
-		false
-	);
+			});
+			$('#modal').modal('show');
+		});
 
 	document.querySelectorAll(".modalCloseBtn").
 		forEach(btn => {
@@ -91,7 +108,9 @@
 				"click",
 				async (e) => {
 					$('#modal').modal('hide');
-					form.reset();
+					quiz_forms.forEach(async (form) => {
+						form.reset();
+					});
 				});
 		});
 
