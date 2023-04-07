@@ -1,51 +1,117 @@
-﻿@model Quiz
+﻿@model List<Quiz>
 @{
 	ViewData["Title"] = "Home Page";
 	var inputType = "radio";
-	if (Model.AllowMultipleChoices)
-	{
-		inputType = "checkbox";
-	}
 }
 
-<div>
-	<form>
-		<h5>@Model.Title</h5><br />
-		<div class="form-check">
-			<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Answer">
-			<label class="form-check-label">
-				@Model.Answer
-			</label>
-		</div>
+<!-- Main card container -->
+<div class="card">
+	<div class="card-body">
 		@{
-			for (var i = 0; i < Model.Options.Count; i++)
+			for (var i = 0; i < Model.Count; ++i)
 			{
-				<div class="form-check">
-					<input class="form-check-input" type="@(inputType)" name="choices" value="@Model.Options[i]">
-					<label class="form-check-label">
-						@Model.Options[i]
-					</label>
+				<div class="card m-2">
+					<div class="card-body">
+						<div>
+							<form>
+								<h5>@Model[i].Title</h5><br />
+
+								@{
+									for (var j = 0; j < Model[i].Options.Count; j++)
+									{
+										<div class="form-check">
+											<input class="form-check-input" type="@(inputType)" name="choices" value="@Model[i].Options[j]">
+											<label class="form-check-label">
+												@Model[i].Options[j]
+											</label>
+										</div>
+									}
+								}
+								<div class="form-check">
+									<input class="form-check-input" type="@(inputType)" name="choices" value="@Model[i].Answer">
+									<label class="form-check-label">
+										@Model[i].Answer
+									</label>
+								</div>
+							</form>
+						</div>
+					</div>
 				</div>
 			}
 		}
-		<input type="submit" />
-	</form>
+
+		<div class="text-center">
+			<button class="btn btn-outline-primary m-4" id="submitBtn">Submit Answers</button>
+		</div>
+
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Result 💫</h5>
+				<button type="button" class="close modalCloseBtn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="result-modal-body">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary modalCloseBtn">Close</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
-	const form = document.querySelector("form");
-	// fix this event listener, only works for radio group
-	form.addEventListener(
-		"submit",
+	const correctAnswers = @Html.Raw(Json.Serialize(Model));
+	const quiz_forms = document.querySelectorAll("form");
+	const modalBody = document.getElementById("result-modal-body");
+	const submitBtn = document.getElementById("submitBtn");
+	// fix this event listener, only works for radio group for now
+	submitBtn.addEventListener(
+		"click",
 		async (event) => {
-			const data = await new FormData(form);
-			for (const entry of data) {
-				if (entry[1] === "@(Model.Answer)") {
-					// modal here
+			// reset modal in case of resubmitted answers
+			modalBody.innerHTML = "";
+			quiz_forms.forEach(async (form, i) => {
+				const data = await new FormData(quiz_forms[i]);
+				for (const entry of data) {
+
+					if (entry[1] === correctAnswers[i].answer) {
+						modalBody.innerHTML += 
+						`<div class="card m-2 bg-success text-white">
+							<div class="card-body">
+								${i + 1}. Correct
+							</div>
+						</div>`;
+					} else {
+						modalBody.innerHTML += 
+						`<div class="card m-2 bg-danger text-white">
+							<div class="card-body">
+								${i + 1}. Incorrect
+							</div>
+						</div>`;
+					}
+
 				}
-			}
-			event.preventDefault();
-		},
-		false
-	);
+			});
+			$('#modal').modal('show');
+		});
+
+	document.querySelectorAll(".modalCloseBtn").
+		forEach(btn => {
+			btn.addEventListener(
+				"click",
+				async (e) => {
+					$('#modal').modal('hide');
+					quiz_forms.forEach(async (form) => {
+						form.reset();
+					});
+				});
+		});
+
 </script>

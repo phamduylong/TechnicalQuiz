@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Properties/ServiceDependencies/TechnicalQuiz20230403182930 - Web Deploy/profile.arm.json
