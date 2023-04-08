@@ -8,29 +8,29 @@
 <div class="card">
 	<div class="card-body">
 		@{
-			for (var i = 0; i < Model.Count; ++i)
+			foreach (var model in Model)
 			{
 				<div class="card m-2">
 					<div class="card-body">
 						<div>
 							<form>
-								<h5>@Model[i].Title</h5><br />
+								<h5>@(model.Title)</h5><br/>
 
 								@{
-									for (var j = 0; j < Model[i].Options.Count; j++)
+									foreach (var option in model.Options)
 									{
 										<div class="form-check">
-											<input class="form-check-input" type="@(inputType)" name="choices" value="@Model[i].Options[j]">
+											<input class="form-check-input" type="@(inputType)" name="choices" value="@option">
 											<label class="form-check-label">
-												@Model[i].Options[j]
+												@option
 											</label>
 										</div>
 									}
 								}
 								<div class="form-check">
-									<input class="form-check-input" type="@(inputType)" name="choices" value="@Model[i].Answer">
+									<input class="form-check-input" type="@(inputType)" name="choices" value="@(model.Answer)">
 									<label class="form-check-label">
-										@Model[i].Answer
+										@(model.Answer)
 									</label>
 								</div>
 							</form>

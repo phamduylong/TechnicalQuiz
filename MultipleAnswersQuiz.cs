@@ -2,11 +2,11 @@
 {
 	public class MultipleAnswersQuiz
 	{
-		public MultipleAnswersQuiz(string _title, List<string> _answers, List<string> _options)
+		public MultipleAnswersQuiz(string title, List<string> answers, List<string> options)
 		{
-			Title = _title;
-			Answer = _answers;
-			Options = _options;
+			Title = title;
+			Answer = answers;
+			Options = options;
 			Id = Guid.NewGuid().ToString();
 		}
 		public string Title { get; set; }
