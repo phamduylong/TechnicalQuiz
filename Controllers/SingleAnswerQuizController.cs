@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TechnicalQuiz.Data;
 using TechnicalQuiz.Models;
 
 namespace TechnicalQuiz.Controllers
 {
-    public class SingleAnswerQuizzesController : Controller
+    public class SingleAnswerQuizController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
 
-		public SingleAnswerQuizzesController(ILogger<HomeController> logger)
+		public SingleAnswerQuizController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
 			_logger.LogInformation("Logger is on SingleAnswerQuizzesController");
