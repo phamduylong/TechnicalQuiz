@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TechnicalQuiz.Data;
 using TechnicalQuiz.Models;
 
 namespace TechnicalQuiz.Controllers
 {
-	public class MultipleAnswersQuizzesController : Controller
+    public class MultipleAnswersQuizController : Controller
 	{
 		public IActionResult Index()
 		{
