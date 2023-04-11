@@ -15,7 +15,8 @@
 					<div class="card-body">
 						<div>
 							<form>
-								<h5>@(model.Title)</h5><br />
+								<p class="text-right position-absolute top-0 end-0" title="Quiz solved" id="completedMark" hidden>✅</p>
+								<h5>@(model.Title)</h5><br/>
 
 								@{
 									foreach (var option in model.Options)
@@ -104,7 +105,7 @@
 										${i + 1}. Correct
 									</div>
 								</div>`;
-
+						form.querySelector("#completedMark").hidden = false;
 					} else {
 						modalBody.innerHTML +=
 							`<div class="card m-2 bg-danger text-white">
