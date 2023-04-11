@@ -68,10 +68,11 @@
 </div>
 
 <script>
-	const correctAnswers = @Html.Raw(Json.Serialize(Model));
+	const quizzes = @Html.Raw(Json.Serialize(Model));
 	const quiz_forms = document.querySelectorAll("form");
 	const modalBody = document.getElementById("result-modal-body");
 	const submitBtn = document.getElementById("submitBtn");
+	const completedQuizzes = Array(quizzes.length).fill(false);
 	submitBtn.addEventListener(
 		"click",
 		async (event) => {
@@ -83,18 +84,32 @@
 				for (const entry of data.values()) {
 					answer = entry;
 				}
-				if (answer === correctAnswers[i].answer) {
-					modalBody.innerHTML +=
-						`<div class="card m-2 bg-success text-white">
+				if (!completedQuizzes[i]) {
+					if (answer === quizzes[i].answer) {
+						completedQuizzes[i] = true;
+						Array.from(form.elements).forEach(input => {
+							input.disabled = true;
+						});
+						modalBody.innerHTML +=
+							`<div class="card m-2 bg-success text-white">
 								<div class="card-body">
 									${i + 1}. Correct
 								</div>
 							</div>`;
-				} else {
-					modalBody.innerHTML +=
-						`<div class="card m-2 bg-danger text-white">
+
+					} else {
+						modalBody.innerHTML +=
+							`<div class="card m-2 bg-danger text-white">
 								<div class="card-body">
 									${i + 1}. Incorrect
+								</div>
+							</div>`;
+					}
+				} else {
+					modalBody.innerHTML +=
+						`<div class="card m-2 bg-success text-white">
+								<div class="card-body">
+									${i + 1}. Correct
 								</div>
 							</div>`;
 				}
@@ -109,9 +124,6 @@
 				"click",
 				async (e) => {
 					$('#modal').modal('hide');
-					quiz_forms.forEach((form) => {
-						form.reset();
-					});
 				});
 		});
 
