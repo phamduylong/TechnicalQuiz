@@ -132,6 +132,11 @@
 				"click",
 				async (e) => {
 					$('#modal').modal('hide');
+					quiz_forms.forEach(form => {
+						if (!completedQuizzes[i]) {
+							form.reset();
+						}
+					});
 				});
 		});
 
