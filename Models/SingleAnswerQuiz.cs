@@ -1,17 +1,17 @@
-﻿namespace TechnicalQuiz.Data
+﻿namespace TechnicalQuiz.Models
 {
-    public class MultipleAnswersQuiz
+    public class SingleAnswerQuiz
     {
-        public MultipleAnswersQuiz(string title, List<string> answers, List<string> options)
+        public SingleAnswerQuiz(string title, string answer, List<string> options)
         {
             Title = title;
-            Answers = answers;
+            Answer = answer;
             Options = options;
             Id = Guid.NewGuid().ToString();
         }
         public string Title { get; set; }
 
-        public List<string> Answers { get; set; }
+        public string Answer { get; set; }
 
         public List<string> Options { get; set; }
 
