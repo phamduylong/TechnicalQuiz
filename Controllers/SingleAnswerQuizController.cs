@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using TechnicalQuiz.Data;
 using TechnicalQuiz.Models;
 
 namespace TechnicalQuiz.Controllers
