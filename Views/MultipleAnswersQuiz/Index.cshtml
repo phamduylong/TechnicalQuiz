@@ -17,7 +17,7 @@
 						<div>
 							<form>
 								<p class="text-right position-absolute top-0 end-0 m-2" title="Quiz solved" id="completedMark" hidden>✅</p>
-								<h5>@(model.Title)</h5><br/>
+								<p class="h5">@(model.Title)</p><br/>
 
 								@{
 									var inputs = model.Options;
@@ -52,7 +52,7 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Result 💫</h5>
+				<h5 class="modal-title" id="resultText"></h5>
 				<button type="button" class="close modalCloseBtn" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -70,14 +70,16 @@
 	const quizzes = @Html.Raw(Json.Serialize(Model));
 	const quiz_forms = document.querySelectorAll("form");
 	const modalBody = document.getElementById("result-modal-body");
+	const resultText = document.getElementById("resultText");
 	const submitBtn = document.getElementById("submitBtn");
 	const completedQuizzes = Array(quizzes.length).fill(false);
 	// fix this event listener, only works for radio group for now
 	submitBtn.addEventListener(
 		"click",
-		async (event) => {
-			// reset modal in case of resubmitted answers
+		async () => {
+			// reset modal content in case of resubmitted answers
 			modalBody.innerHTML = "";
+			let correctCount = 0;
 			quiz_forms.forEach(async (form, i) => {
 				if (!completedQuizzes[i]) {
 					const submittedAnswers = [];
@@ -92,29 +94,31 @@
 						Array.from(form.elements).forEach((input) => {
 							input.disabled = true;
 						});
-						modalBody.innerHTML +=
-							`<div class="card m-2 bg-success text-white">
+						form.querySelector("#completedMark").hidden = false;
+						correctCount++;
+					}
+				} 
+				if (i === quiz_forms.length - 1) {
+					// update the result only in the last loop iteration
+					resultText.innerText = `Result: You answered ${correctCount}/${quizzes.length} correctly ✨`;
+			
+					completedQuizzes.forEach((completed, i) => {
+						if (completed) {
+							modalBody.innerHTML +=
+								`<div class="card m-2 bg-success text-white">
 									<div class="card-body">
 										${i + 1}. Correct
 									</div>
 								</div>`;
-						form.querySelector("#completedMark").hidden = false;
-					} else {
-						modalBody.innerHTML +=
-							`<div class="card m-2 bg-danger text-white">
+						} else {
+							modalBody.innerHTML += 
+								`<div class="card m-2 bg-danger text-white">
 									<div class="card-body">
 										${i + 1}. Incorrect
 									</div>
 								</div>`;
-					}
-
-				} else {
-					modalBody.innerHTML +=
-						`<div class="card m-2 bg-success text-white">
-									<div class="card-body">
-										${i + 1}. Correct
-									</div>
-								</div>`;
+						}
+					});
 				}
 			});
 			$('#modal').modal('show');
@@ -124,7 +128,7 @@
 		forEach(btn => {
 			btn.addEventListener(
 				"click",
-				async (e) => {
+				async () => {
 					$('#modal').modal('hide');
 					quiz_forms.forEach((form, i) => {
 						if (!completedQuizzes[i]) {
