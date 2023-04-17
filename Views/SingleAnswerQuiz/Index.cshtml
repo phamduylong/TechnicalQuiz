@@ -2,8 +2,7 @@
 @model List<SingleAnswerQuiz>
 @{
 	ViewData["Title"] = "Single Answer Quizzes ❓";
-	var inputType = "radio";
-	Random rng = new Random();
+	var rng = new Random();
 }
 
 <!-- Main card container -->
@@ -22,11 +21,11 @@
 								@{
 									var inputs = model.Options;
 									inputs.Add(model.Answer);
-									var shuffledinputs = inputs.OrderBy(a => rng.Next()).ToList();
-									foreach (var input in shuffledinputs)
+									var shuffledInputs = inputs.OrderBy(a => rng.Next()).ToList();
+									foreach (var input in shuffledInputs)
 									{
 										<div class="form-check">
-											<input class="form-check-input" type="@(inputType)" name="choices" value="@input" autocomplete="off">
+											<input class="form-check-input" type="radio" name="choices" value="@input" autocomplete="off">
 											<label class="form-check-label">
 												@input
 											</label>

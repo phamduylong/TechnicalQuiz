@@ -2,8 +2,7 @@
 @model List<MultipleAnswersQuiz>
 @{
 	ViewData["Title"] = "Multi Answers Quizzes ❓";
-	var inputType = "checkbox";
-	Random rng = new Random();
+	var rng = new Random();
 }
 
 <!-- Main card container -->
@@ -21,12 +20,12 @@
 
 								@{
 									var inputs = model.Options;
-									foreach(var answer in model.Answers) inputs.Add(answer);
+									inputs.AddRange(model.Answers);
 									var shuffledInputs = inputs.OrderBy(a => rng.Next()).ToList();
 									foreach (var input in shuffledInputs)
 									{
 										<div class="form-check">
-											<input class="form-check-input" type="@(inputType)" name="choices" value="@input" autocomplete="off">
+											<input class="form-check-input" type="checkbox" name="choices" value="@input" autocomplete="off">
 											<label class="form-check-label">
 												@input
 											</label>
