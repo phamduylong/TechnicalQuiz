@@ -67,7 +67,6 @@
 
 <script>
 	const quizzes = @Html.Raw(Json.Serialize(Model));
-	let correctCount = 0;
 	const quiz_forms = document.querySelectorAll("form");
 	const modalBody = document.getElementById("result-modal-body");
 	const resultText = document.getElementById("resultText");
@@ -91,11 +90,11 @@
 							input.disabled = true;
 						});
 						form.querySelector("#completedMark").hidden = false;
-						correctCount++;
 					}
 				}
 				if (i === quiz_forms.length - 1) {
 					// update the result only in the last loop iteration
+					const correctCount = completedQuizzes.filter((qc) => qc === true).length;
 					resultText.innerText = `Result: You answered ${correctCount}/${quizzes.length} correctly ✨`;
 			
 					completedQuizzes.forEach((completed, i) => {

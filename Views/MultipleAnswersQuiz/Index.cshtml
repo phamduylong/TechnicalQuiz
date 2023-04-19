@@ -78,27 +78,25 @@
 		async () => {
 			// reset modal content in case of resubmitted answers
 			modalBody.innerHTML = "";
-			let correctCount = 0;
 			quiz_forms.forEach(async (form, i) => {
+				const submittedAnswers = [];
+				const data = await new FormData(quiz_forms[i]);
+				for (const entry of data.values()) {
+					// iterate through answers and record them
+					submittedAnswers.push(entry);
+				}
 				if (!completedQuizzes[i]) {
-					const submittedAnswers = [];
-					const data = await new FormData(quiz_forms[i]);
-					for (const entry of data.values()) {
-						// iterate through answers and record them
-						submittedAnswers.push(entry);
-					}
-
 					if (haveSameContents(submittedAnswers, quizzes[i].answers)) {
 						completedQuizzes[i] = true;
 						Array.from(form.elements).forEach((input) => {
 							input.disabled = true;
 						});
 						form.querySelector("#completedMark").hidden = false;
-						correctCount++;
 					}
 				} 
 				if (i === quiz_forms.length - 1) {
 					// update the result only in the last loop iteration
+					const correctCount = completedQuizzes.filter((qc) => qc === true).length;
 					resultText.innerText = `Result: You answered ${correctCount}/${quizzes.length} correctly ✨`;
 			
 					completedQuizzes.forEach((completed, i) => {
