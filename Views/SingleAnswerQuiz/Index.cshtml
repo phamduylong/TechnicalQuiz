@@ -9,18 +9,18 @@
 <div class="card">
 	<div class="card-body">
 		@{
-			foreach (var model in Model)
+			for (var i = 0; i < Model.Count; ++i)
 			{
 				<div class="card m-2">
 					<div class="card-body">
 						<div>
 							<form>
 								<p class="text-right position-absolute top-0 end-0 m-2" title="Quiz solved" id="completedMark" hidden>✅</p>
-								<p class="h5">@(model.Title)</p><br/>
+								<p class="h5">@(i + 1 + ". " + Model[i].Title)</p><br/>
 
 								@{
-									var inputs = model.Options;
-									inputs.Add(model.Answer);
+									var inputs = Model[i].Options;
+									inputs.Add(Model[i].Answer);
 									var shuffledInputs = inputs.OrderBy(a => rng.Next()).ToList();
 									foreach (var input in shuffledInputs)
 									{
