@@ -17,9 +17,9 @@
 							<form>
 								<p class="text-right position-absolute top-0 end-0 m-2" title="Quiz solved" id="completedMark" hidden>✅</p>
 								<p class="h5">@(i + 1 + ". " + Model[i].Title)</p><br/>
-
 								@{
 									var inputs = Model[i].Options;
+									// Combine options and answers to shuffle up
 									inputs.AddRange(Model[i].Answers);
 									var shuffledInputs = inputs.OrderBy(a => rng.Next()).ToList();
 									foreach (var input in shuffledInputs)
@@ -99,19 +99,19 @@
 					const correctCount = completedQuizzes.filter((qc) => qc === true).length;
 					resultText.innerText = `Result: You answered ${correctCount}/${quizzes.length} correctly ✨`;
 			
-					completedQuizzes.forEach((completed, i) => {
+					completedQuizzes.forEach((completed, j) => {
 						if (completed) {
 							modalBody.innerHTML +=
 								`<div class="card m-2 bg-success text-white">
 									<div class="card-body">
-										${i + 1}. Correct
+										${j + 1}. Correct
 									</div>
 								</div>`;
 						} else {
 							modalBody.innerHTML += 
 								`<div class="card m-2 bg-danger text-white">
 									<div class="card-body">
-										${i + 1}. Incorrect
+										${j + 1}. Incorrect
 									</div>
 								</div>`;
 						}
